@@ -7,7 +7,7 @@ ENV USER_ID=1000 \
 RUN  useradd -m -u ${USER_ID} appuser \
     && cargo install cargo-watch cargo-make
 
-WORKDIR /work/backend/server
+WORKDIR /work/backend
 EXPOSE 8080
 
 CMD ["cargo", "watch", "-x", "run"]
