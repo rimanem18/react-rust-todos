@@ -5,7 +5,7 @@ ENV USER_ID=1000 \
 
 # ユーザーを作成
 RUN  useradd -m -u ${USER_ID} appuser \
-    && cargo install cargo-watch cargo-make
+    && cargo install cargo-watch cargo-make cargo-edit
 
 WORKDIR /work/backend
 EXPOSE 8080
