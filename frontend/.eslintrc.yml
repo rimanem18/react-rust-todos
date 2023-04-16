@@ -1,0 +1,40 @@
+env:
+  browser: true
+  es2021: true
+extends:
+  - plugin:react/recommended
+  - airbnb
+  - airbnb-typescript
+  - prettier
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: latest
+  project: ./tsconfig.json
+  sourceType: module
+plugins:
+  - react
+  - react-hooks
+  - '@typescript-eslint'
+rules:
+  react-hooks/rules-of-hooks: error
+  react-hooks/exhaustive-deps: warn
+  react/react-in-jsx-scope: off
+  no-param-reassign: off
+  # 値未使用をエラーでなくワーニングに変更
+  '@typescript-eslint/no-unused-vars': warn
+  # スプレッド構文のエラーを確認なしに変更
+  'react/jsx-props-no-spreading': off
+  semi:
+    - error
+    - never
+  import/extensions:
+    - error
+    - ts: never
+      tsx: never
+      js: never
+      jsx: never
+ignorePatterns:
+  - vite.config.ts
+  - jest.config.ts
