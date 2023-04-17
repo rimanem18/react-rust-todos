@@ -4,28 +4,24 @@
 # コンテナ起動
 make up
 
-# コンテナに入る
-make app
-
 # 再帰的に所有権変更
-chown appuser:appuser /work/backend -R
+make init
 ```
 
 ### command
+
 ```
-# directory rust-sample-app
+# directory project-root
 
 # コンテナの破棄
 make down
 
+# イメージとボリュームを削除
+make destroy
+
+# ボリュームを削除
+make destroy-voolumes
+
 # キャッシュを使わずにコンテナリビルド
 make rebuild
-```
-
-### server start
-```
-# directory app container /work/backend/server
-
-# サーバー起動 & ホットリロード
-cargo watch -x run
 ```

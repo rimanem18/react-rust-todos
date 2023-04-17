@@ -1,9 +1,10 @@
-init:
-	docker compose run --rm app
 up:
 	docker compose up -d
 build:
 	docker compose build --no-cache --force-rm
+init:
+	docker compose exec app chown 1000:1000 /work/backend -R
+	docker compose exec web chown 1000:1000 /home/node/app -R
 stop:
 	docker compose stop
 down:
