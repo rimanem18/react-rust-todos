@@ -12,6 +12,8 @@ services:
     environment:
       - ALLOW_ORIGIN=${ALLOW_ORIGIN}
       - PORT=${PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
 
   web:
     build:
@@ -22,3 +24,20 @@ services:
       - 5173:5173
     volumes:
       - ./frontend:/home/node/app
+
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    tty: true
+    ports:
+      - 3306:3306
+    volumes:
+      - type: volume
+        source: db-store
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
+
+volumes:
+  db-store:
