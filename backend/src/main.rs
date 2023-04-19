@@ -20,6 +20,7 @@ async fn hello() -> impl Responder {
 #[actix_web::main] // or #[tokio::main]
 async fn main() -> std::io::Result<()> {
     let origin = dotenv::var("ALLOW_ORIGIN").unwrap();
+    let port = dotenv::var("PORT").unwrap();
 
     HttpServer::new(move || {
         let cors = Cors::default()
@@ -33,7 +34,7 @@ async fn main() -> std::io::Result<()> {
         .wrap(cors)
         .service(hello)
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(("0.0.0.0", port.parse::<u16>().unwrap()))?
     .run()
     .await
 }

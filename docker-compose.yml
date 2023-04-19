@@ -11,6 +11,7 @@ services:
       - ./backend:/work/backend
     environment:
       - ALLOW_ORIGIN=${ALLOW_ORIGIN}
+      - PORT=${PORT}
 
   web:
     build:
