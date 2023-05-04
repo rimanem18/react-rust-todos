@@ -264,6 +264,7 @@ dependencies = [
  "actix-cors",
  "actix-web",
  "dotenv",
+ "serde",
  "serde_json",
 ]
 
