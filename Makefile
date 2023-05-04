@@ -26,3 +26,5 @@ app:
 	docker compose exec app bash
 web:
 	docker compose exec web ash
+amend:
+	git commit --amend
