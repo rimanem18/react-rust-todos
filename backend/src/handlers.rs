@@ -1,14 +1,15 @@
 /**
  * Todo に対する CRUD 操作を扱う
  */
-use crate::models::{Todo, NewTodo};
+use crate::models::{Todo, TodoList};
 use actix_web::{web, HttpResponse, Responder};
 use serde::Deserialize;
 
 // GET /todos
 // すべての TODO を取得する
 async fn get_todos() -> impl Responder {
-    let todos = Todo::get_all();
+    let todo_list = TodoList::new();
+    let todos = todo_list.get_all();
     HttpResponse::Ok().json(todos)
 }
 
@@ -20,11 +21,8 @@ struct CreateTodoRequest {
 
 // 新しい TODO を作成する
 async fn create_todo(new_todo: web::Json<CreateTodoRequest>) -> impl Responder {
-    let new_todo = NewTodo {
-        title: new_todo.title.clone(),
-        ..Default::default()
-    };
-    let created_todo = Todo::create(new_todo).await;
+    let mut todo_list = TodoList::new();
+    let created_todo = todo_list.add(new_todo.title.clone());
     HttpResponse::Created().json(created_todo)
 }
 
@@ -40,24 +38,28 @@ async fn update_todo(
         id: web::Path<i32>,
         update_todo: web::Json<UpdateTodoRequest>,
     ) -> impl Responder {
-        let mut todo = Todo::get(id.into_inner()).await.unwrap();
-        if let Some(title) = update_todo.title {
-            todo.title = title;
+        let mut todo_list = TodoList::new();
+
+        // id から todo を更新
+        let updated_todo = todo_list.get_mut(&id);
+        if let Some(todo) = updated_todo {
+            if let Some(title) = &update_todo.title {
+                todo.title = title.clone();
+            }
+            if let Some(completed) = &update_todo.completed {
+                todo.completed = completed.clone();
+            }
+            HttpResponse::Ok().json(todo)
+        } else {
+            HttpResponse::NotFound().finish()
         }
-        if let Some(completed) = update_todo.completed {
-            todo.completed = completed;
-        }
-        let updated_todo = Todo::update().await;
-        HttpResponse::Ok().json(updated_todo)
 }
 
 // DELETE /todos/{id}
 // 既存の TODO を削除する
 async fn delete_todo(id: web::Path<i32>) -> impl Responder {
-    let num_deleted = Todo::delete(id.into_inner()).await;
-    if num_deleted > 0 {
-        HttpResponse::NoContent().finish()
-     } else {
-        HttpResponse::NotFound().finish()
-    }
+    let mut todo_list = TodoList::new();
+    todo_list.delete(&id);
+
+    HttpResponse::Ok().finish()
 }

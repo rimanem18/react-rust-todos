@@ -2,6 +2,8 @@
  * Diesel ORM のマイグレーションファイル
  * Todo のテーブル定義
  */
+use diesel::table;
+
 
 table! {
     todos (id) {
